@@ -188,7 +188,7 @@
             @include border-radius(4px);
             bottom: 0;
             cursor: pointer;
-            display: inline-block;
+            display: inline-flex;
             min-height: 40px;
             min-width: 40px;
             max-height: 350px;
@@ -219,6 +219,7 @@
             &.svg {
                   width: 100%;
                   height: inherit;
+                  display: block;
                 img {
                     height: inherit;
                }
