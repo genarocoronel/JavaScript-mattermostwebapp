@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import LoadingImagePreview from 'components/loading_image_preview';
-import {createPlaceholderImage, loadImage} from 'utils/image_utils';
+import {loadImage} from 'utils/image_utils';
 
 const WAIT_FOR_HEIGHT_TIMEOUT = 100;
 
@@ -38,6 +38,11 @@ export default class SizeAwareImage extends React.PureComponent {
          * A callback that is called when image load fails
          */
         onImageLoadFail: PropTypes.func,
+
+        /*
+         * css classes that can added to the img as well as parent div on svg for placeholder
+         */
+        className: PropTypes.string,
     }
 
     constructor(props) {
@@ -69,7 +74,7 @@ export default class SizeAwareImage extends React.PureComponent {
     loadImage = () => {
         const image = loadImage(this.props.src, this.handleLoad);
 
-        image.onerror = this.handleError();
+        image.onerror = this.handleError;
 
         if (!this.props.dimensions) {
             this.waitForHeight(image);
@@ -121,6 +126,7 @@ export default class SizeAwareImage extends React.PureComponent {
     render() {
         const {
             dimensions,
+            src,
             ...props
         } = this.props;
 
@@ -128,15 +134,8 @@ export default class SizeAwareImage extends React.PureComponent {
         Reflect.deleteProperty(props, 'onImageLoaded');
         Reflect.deleteProperty(props, 'onImageLoadFail');
 
-        let src;
-        if (!this.state.loaded && dimensions) {
-            // Generate a blank image as a placeholder because that will scale down to fit the available space
-            // while maintaining the correct aspect ratio
-            src = createPlaceholderImage(dimensions.width, dimensions.height);
-        } else if (this.state.error) {
+        if (this.state.error) {
             return null;
-        } else {
-            src = this.props.src;
         }
 
         return (
@@ -148,10 +147,20 @@ export default class SizeAwareImage extends React.PureComponent {
                         />
                     </div>
                 }
-                <img
-                    {...props}
-                    src={src}
-                />
+                {dimensions && dimensions.width && !this.state.loaded ? (
+                    <div className={this.props.className}>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            viewBox={`0 0 ${dimensions.width} ${this.props.dimensions.height}`}
+                            style={{verticalAlign: 'middle'}}
+                        />
+                    </div>
+                ) : (
+                    <img
+                        {...props}
+                        src={src}
+                    />
+                )}
             </React.Fragment>
         );
     }
