@@ -188,24 +188,20 @@
             @include border-radius(4px);
             bottom: 0;
             cursor: pointer;
-            display: inline-flex;
             min-height: 40px;
             min-width: 40px;
             max-height: 350px;
             max-width: 100%;
-            overflow: hidden;
-            position: relative;
-            z-index: 2;
-
-            &:hover {
-                @include box-shadow(0 2px 5px 0 rgba($black, 0.1), 0 2px 10px 0 rgba($black, 0.1));
-            }
-
             img {
                 @include single-transition(all, .1s, linear);
                 align-self: center;
                 max-height: 350px;
-
+                overflow: hidden;
+                position: relative;
+                z-index: 2;
+                &:hover {
+                    @include box-shadow(0 2px 5px 0 rgba($black, 0.1), 0 2px 10px 0 rgba($black, 0.1));
+                }
                 &.min-preview {
                     max-height: 50px;
                     max-width: 100%;
@@ -222,6 +218,9 @@
                   display: block;
                 img {
                     height: inherit;
+                    &:hover {
+                        @include box-shadow(0 2px 5px 0 rgba($black, 0.1), 0 2px 10px 0 rgba($black, 0.1));
+                    }
                }
             }
         }
@@ -500,4 +499,9 @@
         font-size: 20px;
         opacity: .6;
     }
+}
+
+.image-loading__container {
+    max-height: inherit;
+    overflow: hidden;
 }

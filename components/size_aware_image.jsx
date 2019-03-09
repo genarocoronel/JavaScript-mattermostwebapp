@@ -148,12 +148,14 @@ export default class SizeAwareImage extends React.PureComponent {
                     </div>
                 }
                 {dimensions && dimensions.width && !this.state.loaded ? (
-                    <div className={this.props.className}>
-                        <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox={`0 0 ${dimensions.width} ${this.props.dimensions.height}`}
-                            style={{verticalAlign: 'middle'}}
-                        />
+                    <div className={`image-loading__container ${this.props.className}`}>
+                      <div>
+                          <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+                              style={{verticalAlign: 'middle', maxHeight: `${dimensions.height}`, maxWidth: `${dimensions.width}`}}
+                          />
+                      </div>
                     </div>
                 ) : (
                     <img
